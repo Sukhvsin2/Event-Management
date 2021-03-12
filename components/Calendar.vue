@@ -47,24 +47,7 @@
         const uploadEvents = [
           {name: 'Event Name', start: '2021-03-10 09:00', end: '2021-03-10 10:00', color: this.colors[0], timed: false}
         ];
-
-        // for (let i = 0; i < eventCount; i++) {
-        //   const allDay = this.rnd(0, 3) === 0
-        //   console.log(allDay);
-        //   console.log('\n');
-        //   const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-        //   const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-        //   const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-        //   const second = new Date(first.getTime() + secondTimestamp)
-
-        //   events.push({
-        //     name: this.names[this.rnd(0, this.names.length - 1)],
-        //     start: first,
-        //     end: second,
-        //     color: this.colors[this.rnd(0, this.colors.length - 1)],
-        //     timed: !allDay,
-        //   })
-        // }
+        
         uploadEvents.forEach(event => {
           events.push({
             name: event.name,
