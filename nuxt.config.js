@@ -3,7 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - UnaEvents',
+    titleTemplate: '%s',
     title: 'UnaEvents',
     htmlAttrs: {
       lang: 'en'
@@ -37,10 +37,12 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    // Documentation: https://axios.nuxtjs.org/usage
+    '@nuxtjs/axios'
   ],
 
-  env: {
-    baseUrl: process.env.BASE_URL
+  axios: {
+    baseURL: process.env.BASE_URL
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

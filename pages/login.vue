@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
     name:'Login',
     data(){
@@ -44,7 +43,7 @@ export default {
                         'email': this.email,
                         'password': this.password
                     }
-                    const res = await axios.post('/auth/login', data);
+                    const res = await this.$axios.post('/auth/login', data);
                     // authStore.login(res.data.tokens.access);
                     console.log(res);
                     this.$router.push({path: '/'})
