@@ -36,21 +36,8 @@ export default {
         }
     },
     methods: {
-        async submit(){
-            if(this.$refs.loginform.validate()){
-                try {
-                    const data = {
-                        'email': this.email,
-                        'password': this.password
-                    }
-                    const res = await this.$axios.post('/auth/login', data);
-                    // authStore.login(res.data.tokens.access);
-                    console.log(res);
-                    this.$router.push({path: '/'})
-                } catch (error) {
-                    console.log(error);
-                }
-            }
+        submit(){
+            this.$store.dispatch('login', this.email, this.password);
         }
     }
 
