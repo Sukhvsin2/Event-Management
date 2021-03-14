@@ -34,9 +34,22 @@
       names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Kuch bhi', 'Birthday', 'Conference', 'Party'],
     }),
     methods: {
-      getEvents ({ start, end }) {
-        console.log(start);
-        console.log(end);
+      async getEvents ({ start, end }) {
+        const uploadEvents = [
+          {name: 'Event Name', start: '2021-03-10 09:00', end: '2021-03-10 10:00', color: this.colors[0], timed: false}
+        ];
+        try{
+          const res = await this.$axios.get('/events/')
+          console.log(res.data);
+          res.data.forEach(event => uploadEvents.push({
+            name: event.event_name,
+            start: event.start,
+            end: event.end,
+            color: event.color
+          }))
+        } catch (error) {
+          console.log(error);
+        }
 
         const events = []
 
@@ -44,9 +57,6 @@
         const max = new Date(`${end.date}T23:59:59`)
         const days = (max.getTime() - min.getTime()) / 86400000
 
-        const uploadEvents = [
-          {name: 'Event Name', start: '2021-03-10 09:00', end: '2021-03-10 10:00', color: this.colors[0], timed: false}
-        ];
         
         uploadEvents.forEach(event => {
           events.push({

@@ -4,14 +4,13 @@
       <div class="heading">Lions Event</div>
       <div>
         <v-btn v-if="!isLoggedIn" to="/login">Login</v-btn>
-        <!-- <v-btn v-else @click="logout">Logout</v-btn> -->
+        <v-btn v-else @click="isLoggedIn">Logout</v-btn>
       </div>
     </v-row>
   </v-container>
 </template>
 
 <script>
-// import authStore from "../store/auth"
 export default {
     name: 'Header',
     data(){
@@ -19,8 +18,10 @@ export default {
             isLoggedIn: false,
         }
     },
-    beforeMount(){
-        // this.isLoggedIn = authStore.isLoggedIn();
+    mounted(){
+        this.isLoggedIn = this.$store.getters.isAuthenticated;
+        console.log(this.isLoggedIn);
+
     },
     methods: {
         // logout(){

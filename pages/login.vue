@@ -4,7 +4,7 @@
           <v-container>
               <h3>LOGIN</h3>
           </v-container>
-          <v-form ref="loginform" lazy-validation v-bind="valid">
+          <v-form ref="loginform" v-model="valid" lazy-validation>
               <v-col>
                   <v-text-field @keyup.enter="submit" :rules="emailRules" aria-autocomplete="off" v-model="email" type="email" label="Email"></v-text-field>
                   <v-text-field @keyup.enter="submit" :rules="requiredRule" v-model="password" label="Password" @click:append="visible = !visible" :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'" :type="visible ? 'text' : 'password'"></v-text-field>
@@ -22,6 +22,7 @@ export default {
     name:'Login',
     data(){
         return{
+            valid: true,
             email: '',
             password: '',
             valid: false,
@@ -36,8 +37,10 @@ export default {
         }
     },
     methods: {
-        submit(){
-            this.$store.dispatch('login', this.email, this.password);
+        async submit(){
+            if(this.$refs.loginform.validate()){
+                this.$store.dispatch('login', {email: this.email, password: this.password})
+            }
         }
     }
 
