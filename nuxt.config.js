@@ -43,6 +43,10 @@ export default {
     '@nuxtjs/axios'
   ],
 
+  router: {
+    middleware: 'router-auth'
+  },
+
   axios: {
     baseURL: process.env.BASE_URL
   },
@@ -51,7 +55,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,

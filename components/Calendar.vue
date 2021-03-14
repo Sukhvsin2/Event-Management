@@ -9,14 +9,39 @@
         :event-overlap-mode="mode"
         :event-overlap-threshold="30"
         :event-color="getEventColor"
+        @click:event="showEvent"
         @change="getEvents"
-      ></v-calendar>
+      >
+      </v-calendar>
+        <v-dialog
+            v-model="selectedOpen"
+            persistent
+        >
+            <v-card
+              color="grey lighten-4"
+              min-width="350px"
+              flat
+            >
+              <v-card-actions>
+                <v-btn
+                  text
+                  color="secondary"
+                  @click="selectedOpen = false"
+                >
+                  Cancel
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
   </v-container>
 </template>
 
 <script>
   export default {
     data: () => ({
+      selectedOpen: false,
+      selectedElement: null,
+      selectedEvent: {},
       type: 'month',
       types: ['month', 'week', 'day', '4day'],
       mode: 'stack',
@@ -34,13 +59,18 @@
       names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Kuch bhi', 'Birthday', 'Conference', 'Party'],
     }),
     methods: {
+      showEvent ({ nativeEvent, event }) {
+        console.log(event);
+        this.selectedOpen = true
+
+        nativeEvent.stopPropagation()
+      },
       async getEvents ({ start, end }) {
         const uploadEvents = [
           {name: 'Event Name', start: '2021-03-10 09:00', end: '2021-03-10 10:00', color: this.colors[0], timed: false}
         ];
         try{
           const res = await this.$axios.get('/events/')
-          console.log(res.data);
           res.data.forEach(event => uploadEvents.push({
             name: event.event_name,
             start: event.start,
