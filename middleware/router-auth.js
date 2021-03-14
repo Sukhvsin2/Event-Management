@@ -1,6 +1,4 @@
 export default function ({ store, redirect, error, route }) {
-    console.log(route);
-    console.log(isAuthenticated(store.getters.isAuthenticated));
   if (!isAuthenticated(store.getters.isAuthenticated) && requireAuthentication(route))
     redirect('/')
 }
