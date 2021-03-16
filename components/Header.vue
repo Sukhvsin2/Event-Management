@@ -22,9 +22,16 @@ export default {
     mounted(){
         this.isLoggedIn = this.$store.getters.isAuthenticated.login;
     },
+    updated(){
+      this.$nextTick(function () {
+        console.log('check');
+        this.isLoggedIn = this.$store.getters.isAuthenticated.login;
+      })
+    },
     methods: {
         logout(){
             this.$store.dispatch('logout')
+            this.isLoggedIn = false;
             this.$router.push({path: '/'})
         },
         addEvents(){

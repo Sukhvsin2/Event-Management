@@ -6,10 +6,10 @@
           </v-container>
           <v-form ref="loginform" v-model="valid" lazy-validation>
               <v-col>
-                  <v-text-field @keyup.enter="submit" :rules="emailRules" aria-autocomplete="off" v-model="email" type="email" label="Email"></v-text-field>
+                  <v-text-field :autofocus="true" @keyup.enter="submit" :rules="emailRules" aria-autocomplete="off" v-model="email" type="email" label="Email"></v-text-field>
                   <v-text-field @keyup.enter="submit" :rules="requiredRule" v-model="password" label="Password" @click:append="visible = !visible" :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'" :type="visible ? 'text' : 'password'"></v-text-field>
                   <v-row>
-                      <v-btn class="mx-auto my-4" @click="submit">Login</v-btn>
+                      <v-btn class="mx-auto my-4" @click="submit" :loading="loading">Login</v-btn>
                   </v-row>
               </v-col>
           </v-form>
@@ -22,6 +22,7 @@ export default {
     name:'Login',
     data(){
         return{
+            loading: false,
             valid: true,
             email: '',
             password: '',
@@ -39,7 +40,9 @@ export default {
     methods: {
         async submit(){
             if(this.$refs.loginform.validate()){
+                this.loading = true;
                 this.$store.dispatch('login', {email: this.email, password: this.password})
+                this.loading = false;
             }
         }
     }

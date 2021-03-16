@@ -1,6 +1,5 @@
 <template>
     <v-app>
-        <Header/>
         <v-container>
             <h4>Create Event</h4>
             <v-form ref='eventform' v-model="valid" lazy-validation>
@@ -140,12 +139,8 @@
 </template>
 
 <script>
-import Header from "../components/Header"
 export default {
     name: "addevent",
-    components:{
-        Header
-    },
     data(){
         return{
             name: '',

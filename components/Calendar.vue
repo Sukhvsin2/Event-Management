@@ -16,19 +16,24 @@
         <v-dialog
             v-model="selectedOpen"
             persistent
+            width="500px"
         >
             <v-card
               color="grey lighten-4"
-              min-width="350px"
               flat
             >
+            <v-card-text>
+              <v-card-title>{{dialogTitle}}</v-card-title>
+              <v-card-subtitle>{{dialogDesc}}</v-card-subtitle>
+            </v-card-text>
               <v-card-actions>
                 <v-btn
+                  class="ml-auto"
                   text
                   color="secondary"
                   @click="selectedOpen = false"
                 >
-                  Cancel
+                  Close
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -57,10 +62,12 @@
       events: [],
       colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Kuch bhi', 'Birthday', 'Conference', 'Party'],
+      dialogTitle: 'Title Here',
+      dialogDesc: 'Descr Here'
     }),
     methods: {
       showEvent ({ nativeEvent, event }) {
-        console.log(event);
+        this.dialogTitle = event.name
         this.selectedOpen = true
 
         nativeEvent.stopPropagation()
