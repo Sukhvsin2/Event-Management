@@ -171,7 +171,7 @@ export default {
             const data = {
                 event_name: this.name,
                 start: `${this.date[0]} ${this.startTime}`,
-                end: `${this.date[1]} ${this.endTime}`,
+                end: `${this.date[1] == undefined ? this.date[0] : this.date[1]} ${this.endTime}`,
                 color: this.colors[this.colorSelected]
             }
             let config = {
