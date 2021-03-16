@@ -12,7 +12,11 @@
                       <v-btn class="mx-auto my-4" @click="submit" :loading="loading">Login</v-btn>
                   </v-row>
               </v-col>
+              
           </v-form>
+            <v-alert v-if="errorActive" type="error">
+                {{errorMsg}}
+            </v-alert>
       </v-container>
   </v-app>
 </template>
@@ -35,14 +39,20 @@ export default {
                 v => !!v || 'required',
                 v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
             ],
+            errorActive: false,
+            errorMsg: 'Server error!'
         }
     },
     methods: {
         async submit(){
             if(this.$refs.loginform.validate()){
                 this.loading = true;
-                this.$store.dispatch('login', {email: this.email, password: this.password})
-                this.loading = false;
+                var check = await this.$store.dispatch('login', {email: this.email, password: this.password})
+                if(check){
+                    this.errorActive = check;
+                    this.errorMsg = 'Email or password are wrong!!'
+                }
+                
             }
         }
     }

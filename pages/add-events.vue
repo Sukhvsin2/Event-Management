@@ -130,7 +130,7 @@
                     </v-btn-toggle>
                 </v-row>
                 <v-row class="justify-center mt-12">
-                    <v-btn @click="submit" dark :color="colors[colorSelected]" class="px-12">Create</v-btn>
+                    <v-btn :loading="loading" @click="submit" dark :color="colors[colorSelected]" class="px-12">Create</v-btn>
                 </v-row>
                 
             </v-form>
@@ -143,6 +143,7 @@ export default {
     name: "addevent",
     data(){
         return{
+            loading: false,
             name: '',
             valid: true,
             menu1: false,
@@ -168,6 +169,7 @@ export default {
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         },
         async submit(){
+            this.loading = true;
             const data = {
                 event_name: this.name,
                 start: `${this.date[0]} ${this.startTime}`,
@@ -179,13 +181,12 @@ export default {
                     Authorization: "Bearer " + this.$store.getters.getToken.token,
                 },
             };
-            console.log(data);
             try {
                 const res = await this.$axios.post('/events/edit', data, config);
-                console.log(res.data);
             } catch (error) {
-                
+                console.log(error);
             }
+            this.loading = false
         }
     }
 

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="navbar">
+  <v-container :key="headKey.head" fluid class="navbar">
     <v-row class="align-center justify-space-between">
       <div class="heading"><v-btn text large dark @click="home">Lions Event</v-btn></div>
       <div>
@@ -22,11 +22,10 @@ export default {
     mounted(){
         this.isLoggedIn = this.$store.getters.isAuthenticated.login;
     },
-    updated(){
-      this.$nextTick(function () {
-        console.log('check');
-        this.isLoggedIn = this.$store.getters.isAuthenticated.login;
-      })
+    computed: {
+      headKey(){
+        return this.$store.getters.getHead;
+      }
     },
     methods: {
         logout(){
