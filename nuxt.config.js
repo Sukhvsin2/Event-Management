@@ -48,7 +48,7 @@ export default {
   },
 
   axios: {
-    baseURL: 'https://calendar-una-2021.herokuapp.com/'
+    baseURL: process.env.NODE_ENV !== 'production' ? 'http://localhost:8000' :'https://calendar-una-2021.herokuapp.com/'
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
