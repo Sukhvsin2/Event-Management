@@ -3,7 +3,7 @@
         <v-container>
             <v-row align="center" justify="space-between" class="my-2" v-if="filter">
                 <h4>Create Event</h4>
-                <v-btn color="red" dark>Delete</v-btn>
+                <v-btn color="red" dark @click="deleteEvent" :loading="deleteLoading">Delete</v-btn>
             </v-row>
             <v-alert v-if="alert" dense :type="alertType" class="my-3">{{alertMessage}}</v-alert>
             <v-form ref='eventform' v-model="valid" lazy-validation>
@@ -153,6 +153,7 @@ export default {
             alertMessage: 'Some Error Occured!! Try Again!',
             alertType: 'error',
             loading: false,
+            deleteLoading: false,
             name: '',
             valid: true,
             menu1: false,
@@ -189,6 +190,18 @@ export default {
         },
     },
     methods: {
+        async deleteEvent(){
+            try {
+                this.deleteLoading = true;
+                const res = await this.$axios.delete(`/event${this.id}/`, config)
+                this.alertMessage = 'Event Deleted Successfully!'
+                this.alertType = 'success'
+                this.alert = true
+            } catch (error) {
+                this.alert = true
+            }
+            this.deleteLoading = false
+        },
         parseDate (date) {
             if (!date) return null
 
