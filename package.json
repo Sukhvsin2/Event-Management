@@ -21,9 +21,11 @@
     "@nuxtjs/vuetify": "^1.11.3"
   },
   "pwa": {
-    "icon": {
-      "default": "/static/una-iphone-icon-180.png"
-    },
+    "icons": [
+      {
+        "src": "static/icon.png"
+      }
+    ],
     "meta": {
       "title": "UNA Events",
       "author": "Sukh Singh"
