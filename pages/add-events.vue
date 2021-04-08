@@ -192,7 +192,7 @@ export default {
                     },
                 };
                 try {
-                    const res = await this.$axios.post('/events/edit', data, config);
+                    const res = await this.$axios.post('/events/post', data, config);
                     this.alertMessage = this.name + ' ~ Event Created'
                     this.alertType = 'success'
                     this.alert = true
