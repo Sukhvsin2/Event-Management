@@ -87,7 +87,7 @@
             >
             <v-card-text>
               <v-card-title>{{dialogTitle}}</v-card-title>
-              <v-card-subtitle>{{dialogDesc}}</v-card-subtitle>
+              <v-card-subtitle>{{timings}}</v-card-subtitle>
             </v-card-text>
               <v-card-actions>
                 <v-btn
@@ -133,8 +133,14 @@
       colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Kuch bhi', 'Birthday', 'Conference', 'Party'],
       dialogTitle: 'Title Here',
-      dialogDesc: 'Descr Here'
+      dialogDesc: 'Descr Here',
+      timings: null
     }),
+    computed: {
+      login(){
+        return this.$store.getters
+      }
+    },
     methods: {
       prev () {
         this.$refs.calendar.prev()
@@ -149,8 +155,17 @@
         this.focus = date
         this.type = 'day'
       },
+      formatDate(date){
+        let d = date.split('-')
+        return `${d[1]}-${d[2]}-${d[0]}`
+      },
       showEvent ({ nativeEvent, event }) {
         this.dialogTitle = event.name
+        if(event.start.split(' ')[0] === event.end.split(' ')[0]){
+          this.timings = this.formatDate(event.start.split(' ')[0])
+        }else{
+          this.timings = this.formatDate(event.start.split(' ')[0]) + ' ~ ' + this.formatDate(event.end.split(' ')[0])
+        }
         this.selectedOpen = true
 
         nativeEvent.stopPropagation()

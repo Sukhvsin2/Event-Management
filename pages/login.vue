@@ -52,7 +52,6 @@ export default {
                     this.errorActive = check;
                     this.errorMsg = 'Email or password are wrong!!'
                 }
-                
             }
         }
     }

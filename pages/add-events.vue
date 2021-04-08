@@ -2,8 +2,9 @@
     <v-app>
         <v-container>
             <h4>Create Event</h4>
+            <v-alert v-if="alert" dense :type="alertType" class="my-3">{{alertMessage}}</v-alert>
             <v-form ref='eventform' v-model="valid" lazy-validation>
-                <v-text-field v-model="name" label="Event Name"></v-text-field>
+                <v-text-field v-model="name" label="Event Name" :rules="required"></v-text-field>
                 <v-menu v-model="menu1" 
                         :close-on-content-click="false"
                         transition="scale-transition"
@@ -20,6 +21,7 @@
                         prepend-icon="mdi-calendar"
                         v-bind="attrs"
                         v-on="on"
+                        :rules="required"
                         ></v-text-field>
                     </template>
                     <v-date-picker
@@ -44,6 +46,7 @@
                                     readonly
                                     v-bind="attrs"
                                     v-on="on"
+                                    :rules="required"
                                 >
                                 </v-text-field>
                             </template>
@@ -86,6 +89,7 @@
                                     readonly
                                     v-bind="attrs"
                                     v-on="on"
+                                    :rules="required"
                                 >
                                 </v-text-field>
                             </template>
@@ -132,7 +136,6 @@
                 <v-row class="justify-center mt-12">
                     <v-btn :loading="loading" @click="submit" dark :color="colors[colorSelected]" class="px-12">Create</v-btn>
                 </v-row>
-                
             </v-form>
         </v-container>
     </v-app>
@@ -143,6 +146,9 @@ export default {
     name: "addevent",
     data(){
         return{
+            alert: false,
+            alertMessage: 'Some Error Occured!! Try Again!',
+            alertType: 'error',
             loading: false,
             name: '',
             valid: true,
@@ -153,7 +159,10 @@ export default {
             endDialog: false,
             endTime: null,
             colorSelected: undefined,
-            colors: ['#e55039', '#1e3799', '#079992', '#e58e26']
+            colors: ['#e55039', '#1e3799', '#079992', '#e58e26'],
+            required: [
+                v => !!v || 'Required'
+            ]
         }
     },
     computed: {
@@ -169,24 +178,34 @@ export default {
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         },
         async submit(){
-            this.loading = true;
-            const data = {
-                event_name: this.name,
-                start: `${this.date[0]} ${this.startTime}`,
-                end: `${this.date[1] == undefined ? this.date[0] : this.date[1]} ${this.endTime}`,
-                color: this.colors[this.colorSelected]
+            if(this.$refs.eventform.validate()){
+                this.loading = true;
+                const data = {
+                    event_name: this.name,
+                    start: `${this.date[0]} ${this.startTime}`,
+                    end: `${this.date[1] == undefined ? this.date[0] : this.date[1]} ${this.endTime}`,
+                    color: this.colors[this.colorSelected]
+                }
+                let config = {
+                    headers: {
+                        Authorization: "Bearer " + this.$store.getters.getToken.token,
+                    },
+                };
+                try {
+                    const res = await this.$axios.post('/events/edit', data, config);
+                    this.alertMessage = this.name + ' ~ Event Created'
+                    this.alertType = 'success'
+                    this.alert = true
+
+                    this.name = '',
+                    this.startTime = null
+                    this.endTime = null
+
+                } catch (error) {
+                    this.alert = true
+                }
+                this.loading = false
             }
-            let config = {
-                headers: {
-                    Authorization: "Bearer " + this.$store.getters.getToken.token,
-                },
-            };
-            try {
-                const res = await this.$axios.post('/events/edit', data, config);
-            } catch (error) {
-                console.log(error);
-            }
-            this.loading = false
         }
     }
 
