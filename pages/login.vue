@@ -47,11 +47,15 @@ export default {
         async submit(){
             if(this.$refs.loginform.validate()){
                 this.loading = true;
-                var check = await this.$store.dispatch('login', {email: this.email, password: this.password})
-                if(check){
-                    this.errorActive = check;
-                    this.errorMsg = 'Email or password are wrong!!'
+                try {
+                    var res = await this.$axios.post('/auth/login', {email: this.email, password: this.password})
+                    this.$router.replace('/')
+                    this.$store.dispatch('setLogin', true)
+                    this.$store.dispatch('setToken', res.data.tokens.access)
+                } catch (error) {
+                    this.errorActive = true;
                 }
+                this.loading = false
             }
         }
     }

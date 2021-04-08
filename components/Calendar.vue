@@ -86,7 +86,14 @@
               flat
             >
             <v-card-text>
-              <v-card-title>{{dialogTitle}}</v-card-title>
+              <v-card-title>
+                <v-row align="center" justify="space-between" class="my-1">
+                  {{dialogTitle}}
+                  <v-btn :to="`/add-events?filter=true&name=${dialogTitle}&date=${timings}&id=${dialogId}&time=${time}`" v-if="login" icon>
+                    <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+                </v-row>
+              </v-card-title>
               <v-card-subtitle>{{timings}}</v-card-subtitle>
             </v-card-text>
               <v-card-actions>
@@ -134,11 +141,14 @@
       names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Kuch bhi', 'Birthday', 'Conference', 'Party'],
       dialogTitle: 'Title Here',
       dialogDesc: 'Descr Here',
-      timings: null
+      timings: null,
+      time: null,
+      dialogColor: null,
+      dialogId: null
     }),
     computed: {
       login(){
-        return this.$store.getters
+        return this.$store.getters.isAuthenticated.login
       }
     },
     methods: {
@@ -166,21 +176,27 @@
         }else{
           this.timings = this.formatDate(event.start.split(' ')[0]) + ' ~ ' + this.formatDate(event.end.split(' ')[0])
         }
+        this.dialogColor = event.color
+        this.time = `${event.start} ${event.end}`
+        this.dialogId = event.id
+        console.log(event);
         this.selectedOpen = true
 
         nativeEvent.stopPropagation()
       },
       async getEvents ({ start, end }) {
         const uploadEvents = [
-          {name: 'Event Name', start: '2021-03-10 09:00', end: '2021-03-10 10:00', color: this.colors[0], timed: false}
+          // {name: 'Event Name', start: '2021-03-10 09:00', end: '2021-03-10 10:00', color: this.colors[0]}
         ];
         try{
           const res = await this.$axios.get('/events/')
+          console.log(res.data);
           res.data.forEach(event => uploadEvents.push({
             name: event.event_name,
             start: event.start,
             end: event.end,
-            color: event.color
+            color: event.color,
+            id: event.id
           }))
         } catch (error) {
           console.log(error);
@@ -199,7 +215,8 @@
             start: event.start,
             end: event.end,
             color: event.color,
-            timed: event.timed
+            // timed: event.timed,
+            id: event.id
           })
         })
         this.events = events

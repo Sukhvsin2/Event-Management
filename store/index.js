@@ -69,6 +69,12 @@ export const actions = {
             return true
         }
     },
+    setToken({ commit }, token) {
+        commit('SET_TOKEN', token)
+    },
+    setLogin({ commit }, value) {
+        commit('SET_LOGIN', value)
+    },
     headStateChange({commit}) {
         commit("SET_HEAD");
     },

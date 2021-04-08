@@ -1,7 +1,10 @@
 <template>
     <v-app>
         <v-container>
-            <h4>Create Event</h4>
+            <v-row align="center" justify="space-between" class="my-2" v-if="filter">
+                <h4>Create Event</h4>
+                <v-btn color="red" dark>Delete</v-btn>
+            </v-row>
             <v-alert v-if="alert" dense :type="alertType" class="my-3">{{alertMessage}}</v-alert>
             <v-form ref='eventform' v-model="valid" lazy-validation>
                 <v-text-field v-model="name" label="Event Name" :rules="required"></v-text-field>
@@ -162,7 +165,22 @@ export default {
             colors: ['#e55039', '#1e3799', '#079992', '#e58e26'],
             required: [
                 v => !!v || 'Required'
-            ]
+            ],
+            filter: false,
+            id: null,
+        }
+    },
+    mounted(){
+        let data = this.$route.query
+        console.log(data);
+        if (Object.entries(data).length !== 0) {
+            this.name = data.name
+            let time = data.time.split(' ')
+            this.date = time[0] === time[2] ? [time[0]] : [time[0], time[2]]
+            this.startTime = time[1]
+            this.endTime = time[3]
+            this.filter = data.filter
+            this.id = data.id;
         }
     },
     computed: {
@@ -192,7 +210,7 @@ export default {
                     },
                 };
                 try {
-                    const res = await this.$axios.post('/events/post', data, config);
+                    const res = this.filter ? await this.$axios.put(`/events/${this.id}/`, data, config) : await this.$axios.post('/events/post', data, config) ;
                     this.alertMessage = this.name + ' ~ Event Created'
                     this.alertType = 'success'
                     this.alert = true
@@ -202,6 +220,7 @@ export default {
                     this.endTime = null
 
                 } catch (error) {
+                    console.log(error);
                     this.alert = true
                 }
                 this.loading = false
