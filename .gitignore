@@ -8,7 +8,7 @@ yarn-debug.log*
 yarn-error.log*
 
 #pwa
-sw.*
+# sw.*
 
 # Runtime data
 pids
